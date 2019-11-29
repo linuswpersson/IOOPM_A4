@@ -1,4 +1,5 @@
-package org.ioopm.calculator.parser;
+package org.ioopm.calculator;
+import org.ioopm.calculator.parser.*;
 import org.ioopm.calculator.ast.*;
 import java.util.HashMap;
 import java.io.IOException;
