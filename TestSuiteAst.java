@@ -6,7 +6,7 @@ import org.junit.runners.Suite;
 @RunWith(Suite.class)
 
 @Suite.SuiteClasses({ 
-   VariableTest.class, ConstantTest.class
+	VariableTest.class, ConstantTest.class, NamedconstantTest.class, SinTest.class, CosTest.class, LogTest.class, ExpTest.class, NegationTest.class
 })
 
 public class TestSuiteAst {
