@@ -26,6 +26,13 @@ public class CosTest extends TestCase {
     }
 
     @Test
+    public void testGetHs() {
+        Cos c1 = new Cos(new Constant(25.0));
+	Constant con1 = new Constant(25.0);
+	assertEquals(con1, c1.getHs());
+    }
+
+    @Test
     public void testGetName() {
         Cos c1 = new Cos(new Constant(20.0));
 	assertEquals("cos", c1.getName());

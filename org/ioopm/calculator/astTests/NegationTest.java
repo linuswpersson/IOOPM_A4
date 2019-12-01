@@ -26,6 +26,13 @@ public class NegationTest extends TestCase {
     }
 
     @Test
+    public void testGetHs() {
+        Negation n1 = new Negation(new Constant(25.0));
+	Constant con1 = new Constant(25.0);
+	assertEquals(con1, n1.getHs());
+    }
+
+    @Test
     public void testGetName() {
         Negation n1 = new Negation(new Constant(20.0));
 	assertEquals("-", n1.getName());

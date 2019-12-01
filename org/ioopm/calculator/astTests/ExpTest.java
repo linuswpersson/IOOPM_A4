@@ -26,6 +26,13 @@ public class ExpTest extends TestCase {
     }
 
     @Test
+    public void testGetHs() {
+        Exp e1 = new Exp(new Constant(25.0));
+	Constant con1 = new Constant(25.0);
+	assertEquals(con1, e1.getHs());
+    }
+
+    @Test
     public void testGetName() {
         Exp e1 = new Exp(new Constant(20.0));
 	assertEquals("10^", e1.getName());

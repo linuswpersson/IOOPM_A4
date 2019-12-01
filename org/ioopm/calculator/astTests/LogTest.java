@@ -26,6 +26,13 @@ public class LogTest extends TestCase {
     }
 
     @Test
+    public void testGetHs() {
+        Log l1 = new Log(new Constant(25.0));
+	Constant con1 = new Constant(25.0);
+	assertEquals(con1, l1.getHs());
+    }
+
+    @Test
     public void testGetName() {
         Log l1 = new Log(new Constant(20.0));
 	assertEquals("log", l1.getName());

@@ -26,6 +26,13 @@ public class SinTest extends TestCase {
     }
 
     @Test
+    public void testGetHs() {
+        Sin s1 = new Sin(new Constant(25.0));
+	Constant con1 = new Constant(25.0);
+	assertEquals(con1, s1.getHs());
+    }
+
+    @Test
     public void testGetName() {
         Sin s1 = new Sin(new Constant(20.0));
 	assertEquals("sin", s1.getName());
