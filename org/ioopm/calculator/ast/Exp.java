@@ -8,7 +8,7 @@ public class Exp extends Unary {
     }
 
     public String getName() {
-        return "10^";
+        return "exp";
     }
 
     public SymbolicExpression eval(Environment vars) {

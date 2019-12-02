@@ -160,7 +160,7 @@ public class CalculatorParser {
 		return new Namedconstant(Constants.namedConstants.get(operation), operation);
 	    }
 	    else{
-		return new Variable(operation);
+		return new Variable(this.st.sval);
 	    }
 	}
 	throw new SyntaxErrorException("Invalid input");

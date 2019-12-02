@@ -35,19 +35,19 @@ public class ExpTest extends TestCase {
     @Test
     public void testGetName() {
         Exp e1 = new Exp(new Constant(20.0));
-	assertEquals("10^", e1.getName());
+	assertEquals("exp", e1.getName());
     }
 
     @Test
     public void testConstantToString() {
         Exp e1 = new Exp(new Constant(20.0));
-	assertEquals("10^ 20.0", e1.toString());
+	assertEquals("exp 20.0", e1.toString());
     }
 
     @Test
     public void testParenthesesToString() {
         Exp e1 = new Exp(new Addition(new Constant(40.0), new Variable("x")));
-	assertEquals("10^ (40.0 + x)", e1.toString());
+	assertEquals("exp (40.0 + x)", e1.toString());
     }
 
     @Test

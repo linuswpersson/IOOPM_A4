@@ -75,7 +75,7 @@ public class AdditionTest extends TestCase {
 	assertEquals("25.0 + (foo * 5.0)", a2.toString());
     }
 
-        @Test
+    @Test
     public void testTrueEquals() {
 	Addition a1 = new Addition(new Constant(25.0), new Variable("bar"));
 	Addition a2 = new Addition(new Constant(25.0), new Variable("bar"));
