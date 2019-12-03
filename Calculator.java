@@ -41,6 +41,7 @@ class Calculator {
 		    }
 		    else{
 		        vars.clear();
+			System.out.println("Variables cleared.");
 		    }
 		}
 		else {
@@ -50,7 +51,6 @@ class Calculator {
 			fullyEvaluated++;
 		    }
 		    System.out.println(evaluation);
-		    System.out.println("Please enter an expression: ");
 		}
 	    }catch(IllegalExpressionException e) {
 		System.out.print("Assignment Error: ");
@@ -62,6 +62,7 @@ class Calculator {
 		System.err.println("IO Exception!");
 	    }
 	    if(event){
+	        System.out.println("Please enter an expression: ");
 		String str = sc.nextLine();
 		expressionsEntered++;
 		p.updateString(str);

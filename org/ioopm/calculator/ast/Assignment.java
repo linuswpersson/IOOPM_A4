@@ -15,7 +15,7 @@ public class Assignment extends Binary {
     }
 
     public int getPriority() {
-        return -1;
+        return 3;
     }
 
     /**
