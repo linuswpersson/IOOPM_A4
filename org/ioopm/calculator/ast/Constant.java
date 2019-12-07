@@ -23,6 +23,11 @@ public class Constant extends Atom{
 	return String.valueOf(this.value);
     }
 
+    @Override
+    public SymbolicExpression accept(Visitor v) {
+	return v.visit(this);
+    }
+
     /**
      *Equal functions that compares a constant to an Object
      *@param other, constant to compare
@@ -39,9 +44,4 @@ public class Constant extends Atom{
     public boolean equals(Constant other) {
 	return this.value == other.value;
     }
-    
-    public SymbolicExpression eval(Environment vars) {
-	return new Constant(this.value);
-    }
-
 }

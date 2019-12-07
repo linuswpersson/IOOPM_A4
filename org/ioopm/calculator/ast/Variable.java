@@ -27,18 +27,13 @@ public class Variable extends Atom {
 	return this.identifier.equals(other.identifier);
     }
 
-    /**
-     * Override of eval function that exchanges user assigned variables to thier corresponding value if pre-assigned.
-     * @param Enviroment that holds a hashmap with all user assigned variables and thier values.
-     * @return a new Variable with input variable name if no value has been bound. otherwise, returns the SymbolicExpression bound to input Variable.
-     */
-    public SymbolicExpression eval(Environment vars) {
-	if(vars.containsKey(this)){
-	    return vars.get(this);
-	}else {
-	    String arg = this.identifier;
-	    return new Variable(arg);
-	}
+    public String getName() {
+	return this.identifier;
+    }
+
+    @Override
+    public SymbolicExpression accept(Visitor v) {
+	return v.visit(this);
     }
 
     public int hashCode() {

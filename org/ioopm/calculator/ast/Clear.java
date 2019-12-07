@@ -13,8 +13,9 @@ public class Clear extends Command {
         return theInstance;
     }
 
-    public SymbolicExpression eval(Environment vars) {
-	throw new IllegalArgumentException("Commands can't be evaluated.");
+    @Override
+    public SymbolicExpression accept(Visitor v) {
+	return v.visit(this);
     }
 
     public boolean isCommand() {

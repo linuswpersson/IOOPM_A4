@@ -36,9 +36,4 @@ public class Namedconstant extends Atom{
     public boolean equals(Namedconstant other) {
 	return this.value == other.value && this.identifier.equals(other.identifier);
     }
-
-    public SymbolicExpression eval(Environment vars) {
-	return new Namedconstant(this.value, this.identifier);
-    }
-
 }

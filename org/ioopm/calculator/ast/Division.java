@@ -15,14 +15,8 @@ public class Division extends Binary {
 	return 2;
     }
 
-    public SymbolicExpression eval(Environment vars) {
-	SymbolicExpression lArg = this.getLhs().eval(vars);
-	SymbolicExpression rArg = this.getRhs().eval(vars);
-	if (lArg.isConstant() > 0 && rArg.isConstant() > 0) {
-	    return new Constant(lArg.getValue() / rArg.getValue());
-	} else {
-	    return new Division((lArg), (rArg));
-	}
+    @Override
+    public SymbolicExpression accept(Visitor v) {
+	return v.visit(this);
     }
-    
 }

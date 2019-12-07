@@ -28,6 +28,7 @@ class Calculator {
 	Scanner sc = new Scanner(System.in);
 	String expression = sc.nextLine();
 	CalculatorParser p = new CalculatorParser(expression);
+	final EvaluationVisitor evaluator = new EvaluationVisitor();
 	while(event) {
 	    try {
 		SymbolicExpression result = p.parse();
@@ -45,10 +46,11 @@ class Calculator {
 		    }
 		}
 		else {
-		    SymbolicExpression evaluation = result.eval(vars);
+		    
+		    SymbolicExpression evaluation = evaluator.evaluate(result, vars);
 		    successEvaluated++;
 		    if (evaluation.isConstant() > 0){
-			fullyEvaluated++;
+		    	fullyEvaluated++;
 		    }
 		    System.out.println(evaluation);
 		}

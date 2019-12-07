@@ -1,5 +1,7 @@
 Welcome to the parser!
-Please enter an expression: 3.0
+Please enter an expression: 100.0
+Please enter an expression: 
+3.0
 Please enter an expression: 
 3.0 + y
 Please enter an expression: 
@@ -31,6 +33,7 @@ Please enter an expression:
 Please enter an expression: 
 {g=6.0, x=pi, y=z + 2.0, z=3.0, f=z + 2.0}
 Please enter an expression: 
+Variables cleared.
 Please enter an expression: 
 {}
 Please enter an expression: 
@@ -56,6 +59,6 @@ Please enter an expression:
 program terminated.
 
 ------Statistics------
-Expressions entered: 27
-Successfully evaluated: 20
-Fully evaluated: 12
+Expressions entered: 28
+Successfully evaluated: 21
+Fully evaluated: 13
