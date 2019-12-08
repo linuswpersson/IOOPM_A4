@@ -48,9 +48,10 @@ public class VarsTest extends TestCase {
     @Test
     public void testEval() {
 	Environment vars = new Environment();
+	EvaluationVisitor evaluator = new EvaluationVisitor();
 	SymbolicExpression v1 = Vars.instance();
 	try{
-	    SymbolicExpression ignore = v1.eval(vars);
+	    SymbolicExpression ignore = evaluator.evaluate(v1, vars);
 	} catch(IllegalArgumentException ex) {
 	    assertTrue(ex instanceof IllegalArgumentException);
 	}

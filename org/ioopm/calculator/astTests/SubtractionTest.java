@@ -97,18 +97,20 @@ public class SubtractionTest extends TestCase {
     }
 
     @Test
-    public void testCalculableEval() {
+    public void testCalculableAccept() {
 	Environment vars = new Environment();
+	EvaluationVisitor evaluator = new EvaluationVisitor();
         Subtraction s1 = new Subtraction(new Constant(25.0), new Constant(5.0));
 	Constant c1 = new Constant(20.0);
-	assertEquals(c1, s1.eval(vars));
+	assertEquals(c1, evaluator.evaluate(s1, vars));
     }
 
     @Test
-    public void testNonCalculableEval() {
+    public void testNonCalculableAccept() {
 	Environment vars = new Environment();
+	EvaluationVisitor evaluator = new EvaluationVisitor();
 	Subtraction s1 = new Subtraction(new Constant(25.0), new Variable("foo"));
 	Subtraction s2 = new Subtraction(new Constant(25.0), new Variable("foo"));
-	assertEquals(s2, s1.eval(vars));
+	assertEquals(s2, evaluator.evaluate(s1, vars));
     }
 }

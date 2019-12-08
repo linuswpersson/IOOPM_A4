@@ -46,11 +46,12 @@ public class ClearTest extends TestCase {
     }
 
     @Test
-    public void testEval() {
+    public void testAccept() {
 	Environment vars = new Environment();
+        EvaluationVisitor evaluator = new EvaluationVisitor();
 	SymbolicExpression c1 = Clear.instance();
 	try{
-	    SymbolicExpression ignore = c1.eval(vars);
+	    SymbolicExpression ignore = evaluator.evaluate(c1, vars);
 	} catch(IllegalArgumentException ex) {
 	    assertTrue(ex instanceof IllegalArgumentException);
 	}

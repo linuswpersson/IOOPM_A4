@@ -79,18 +79,20 @@ public class NegationTest extends TestCase {
     }
 
     @Test
-    public void testConstantEval() {
+    public void testConstantAccept() {
 	Environment vars = new Environment();
+	EvaluationVisitor evaluator = new EvaluationVisitor();
         Negation n1 = new Negation(new Constant(50.0));
 	Constant c1 = new Constant(-50);
-	assertEquals(c1, n1.eval(vars));
+	assertEquals(c1, evaluator.evaluate(n1, vars));
     }
 
     @Test
-    public void testNonConstantEval() {
+    public void testNonConstantAccept() {
 	Environment vars = new Environment();
+	EvaluationVisitor evaluator = new EvaluationVisitor();
         Negation n1 = new Negation(new Variable("x"));
         Negation n2 = new Negation(new Variable("x"));
-	assertEquals(n2, n1.eval(vars));
+	assertEquals(n2, evaluator.evaluate(n1, vars));
     }
 }

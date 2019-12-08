@@ -75,9 +75,10 @@ public class ConstantTest extends TestCase {
     }
 
     @Test
-    public void testEval() {
+    public void testAccept() {
 	Environment vars = new Environment();
+	EvaluationVisitor evaluator = new EvaluationVisitor();
         Constant c1 = new Constant(20);
-	assertEquals(c1, c1.eval(vars));
+	assertEquals(c1, evaluator.evaluate(c1, vars));
     }
 }

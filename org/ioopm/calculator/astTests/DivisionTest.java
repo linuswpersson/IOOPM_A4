@@ -97,18 +97,20 @@ public class DivisionTest extends TestCase {
     }
 
     @Test
-    public void testCalculableEval() {
+    public void testCalculableAccept() {
 	Environment vars = new Environment();
+	EvaluationVisitor evaluator = new EvaluationVisitor();
 	Division d1 = new Division(new Constant(30.0), new Constant(5.0));
 	Constant c1 = new Constant(6.0);
-	assertEquals(c1, d1.eval(vars));
+	assertEquals(c1, evaluator.evaluate(d1, vars));
     }
 
     @Test
-    public void testNonCalculableEval() {
+    public void testNonCalculableAccept() {
 	Environment vars = new Environment();
+	EvaluationVisitor evaluator = new EvaluationVisitor();
         Division d1 = new Division(new Constant(25.0), new Variable("bar"));
         Division d2 = new Division(new Constant(25.0), new Variable("bar"));
-	assertEquals(d2, d1.eval(vars));
+	assertEquals(d2, evaluator.evaluate(d1, vars));
     }
 }

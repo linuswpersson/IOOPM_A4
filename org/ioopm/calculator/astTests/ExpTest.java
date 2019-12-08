@@ -79,17 +79,19 @@ public class ExpTest extends TestCase {
     }
 
     @Test
-    public void testConstantEval() {
+    public void testConstantAccept() {
 	Environment vars = new Environment();
+	EvaluationVisitor evaluator = new EvaluationVisitor();
         Exp e1 = new Exp(new Constant(2.0));
-	assertEquals(new Constant(100), e1.eval(vars));
+	assertEquals(new Constant(100), evaluator.evaluate(e1, vars));
     }
 
     @Test
-    public void testNonConstantEval() {
+    public void testNonConstantAccept() {
 	Environment vars = new Environment();
+	EvaluationVisitor evaluator = new EvaluationVisitor();
 	Exp e1 = new Exp(new Variable("x"));
 	Exp e2 = new Exp(new Variable("x"));
-	assertEquals(e2, e1.eval(vars));
+	assertEquals(e2, evaluator.evaluate(e1, vars));
     }
 }

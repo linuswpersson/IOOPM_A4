@@ -46,11 +46,12 @@ public class QuitTest extends TestCase {
     }
 
     @Test
-    public void testEval() {
+    public void testAccept() {
 	Environment vars = new Environment();
+	EvaluationVisitor evaluator = new EvaluationVisitor();
 	SymbolicExpression q1 = Quit.instance();
 	try{
-	    SymbolicExpression ignore = q1.eval(vars);
+	    SymbolicExpression ignore = evaluator.evaluate(q1, vars);
 	} catch(IllegalArgumentException ex) {
 	    assertTrue(ex instanceof IllegalArgumentException);
 	}

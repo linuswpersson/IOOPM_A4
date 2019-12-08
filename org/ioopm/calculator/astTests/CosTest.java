@@ -79,17 +79,19 @@ public class CosTest extends TestCase {
     }
 
     @Test
-    public void testConstantEval() {
+    public void testConstantAccept() {
 	Environment vars = new Environment();
+        EvaluationVisitor evaluator = new EvaluationVisitor();
         Cos c1 = new Cos(new Constant(0));
-	assertEquals(new Constant(1.0), c1.eval(vars));
+	assertEquals(new Constant(1.0), evaluator.evaluate(c1, vars));
     }
 
     @Test
-    public void testNonConstantEval() {
+    public void testNonConstantAccept() {
 	Environment vars = new Environment();
+        EvaluationVisitor evaluator = new EvaluationVisitor();
         Cos c1 = new Cos(new Variable("x"));
 	Cos c2 = new Cos(new Variable("x"));
-	assertEquals(c2, c1.eval(vars));
+	assertEquals(c2, evaluator.evaluate(c1, vars));
     }
 }

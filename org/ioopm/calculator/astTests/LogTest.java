@@ -79,17 +79,19 @@ public class LogTest extends TestCase {
     }
 
     @Test
-    public void testConstantEval() {
+    public void testConstantAccept() {
 	Environment vars = new Environment();
+	EvaluationVisitor evaluator = new EvaluationVisitor();
         Log l1 = new Log(new Constant(100));
-	assertEquals(new Constant(2), l1.eval(vars));
+	assertEquals(new Constant(2), evaluator.evaluate(l1, vars));
     }
 
     @Test
-    public void testNonConstantEval() {
+    public void testNonConstantAccept() {
 	Environment vars = new Environment();
+	EvaluationVisitor evaluator = new EvaluationVisitor();
         Log l1 = new Log(new Variable("x"));
 	Log l2 = new Log(new Variable("x"));
-	assertEquals(l2, l1.eval(vars));
+	assertEquals(l2, evaluator.evaluate(l1, vars));
     }
 }

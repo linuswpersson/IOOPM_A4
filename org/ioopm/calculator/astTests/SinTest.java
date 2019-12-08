@@ -79,17 +79,19 @@ public class SinTest extends TestCase {
     }
 
     @Test
-    public void testConstantEval() {
+    public void testConstantAccept() {
 	Environment vars = new Environment();
+	EvaluationVisitor evaluator = new EvaluationVisitor();
         Sin s1 = new Sin(new Constant(0));
-	assertEquals(new Constant(0), s1.eval(vars));
+	assertEquals(new Constant(0), evaluator.evaluate(s1, vars));
     }
 
     @Test
-    public void testNonConstantEval() {
+    public void testNonConstantAccept() {
 	Environment vars = new Environment();
+	EvaluationVisitor evaluator = new EvaluationVisitor();
         Sin s1 = new Sin(new Variable("x"));
 	Sin s2 = new Sin(new Variable("x"));
-	assertEquals(s2, s1.eval(vars));
+	assertEquals(s2, evaluator.evaluate(s1, vars));
     }
 }

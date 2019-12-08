@@ -63,20 +63,22 @@ public class VariableTest extends TestCase {
     }
 
     @Test
-    public void testEvalNoAssignment() {
+    public void testAcceptNoAssignment() {
 	Environment vars = new Environment();
+	EvaluationVisitor evaluator = new EvaluationVisitor();
         Variable v1 = new Variable("foo");
-	assertEquals(v1, v1.eval(vars));
+	assertEquals(v1, evaluator.evaluate(v1, vars));
     }
 
     @Test
-    public void testEvalWithAssignmentInEnvironment() {
+    public void testAcceptWithAssignmentInEnvironment() {
 	Environment vars = new Environment();
+	EvaluationVisitor evaluator = new EvaluationVisitor();
 	SymbolicExpression v1 = new Variable("foo");
 	SymbolicExpression assignment = new Constant(45);
 	vars.put((Variable)v1, assignment);
         Variable v2 = new Variable("foo");
 	Constant c1 = new Constant(45);
-	assertEquals(c1, v2.eval(vars));
+	assertEquals(c1, evaluator.evaluate(v2, vars));
     }
 }

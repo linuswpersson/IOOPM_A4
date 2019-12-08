@@ -97,18 +97,20 @@ public class MultiplicationTest extends TestCase {
     }
 
     @Test
-    public void testCalculableEval() {
+    public void testCalculableAccept() {
 	Environment vars = new Environment();
+	EvaluationVisitor evaluator = new EvaluationVisitor();
         Multiplication m1 = new Multiplication(new Constant(25.0), new Constant(5.0));
 	Constant c1 = new Constant(125.0);
-	assertEquals(c1, m1.eval(vars));
+	assertEquals(c1, evaluator.evaluate(m1, vars));
     }
 
     @Test
-    public void testNonCalculableEval() {
+    public void testNonCalculableAccept() {
 	Environment vars = new Environment();
+	EvaluationVisitor evaluator = new EvaluationVisitor();
         Multiplication m1 = new Multiplication(new Constant(25.0), new Variable("foo"));
         Multiplication m2 = new Multiplication(new Constant(25.0), new Variable("foo"));
-	assertEquals(m2, m1.eval(vars));
+	assertEquals(m2, evaluator.evaluate(m1, vars));
     }
 }

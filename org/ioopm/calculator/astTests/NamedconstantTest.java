@@ -68,12 +68,4 @@ public class NamedconstantTest extends TestCase {
         Variable v1 = new Variable("foo");
 	assertFalse(n1.equals(v1));
     }
-
-    @Test
-    public void testEval() {
-	Environment vars = new Environment();
-        Namedconstant n1 = new Namedconstant(100.0, "foo");
-        Namedconstant n2 = new Namedconstant(100.0, "foo");
-	assertEquals(n2, n1.eval(vars));
-    }
 }

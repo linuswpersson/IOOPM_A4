@@ -97,18 +97,20 @@ public class AdditionTest extends TestCase {
     }
 
     @Test
-    public void testCalculableEval() {
+    public void testCalculableAccept() {
 	Environment vars = new Environment();
+        EvaluationVisitor evaluator = new EvaluationVisitor();
 	Addition a1 = new Addition(new Constant(25.0), new Constant(5.0));
 	Constant c1 = new Constant(30.0);
-	assertEquals(c1, a1.eval(vars));
+	assertEquals(c1, evaluator.evaluate(a1, vars));
     }
 
     @Test
-    public void testNonCalculableEval() {
+    public void testNonCalculableAccept() {
 	Environment vars = new Environment();
+        EvaluationVisitor evaluator = new EvaluationVisitor();
 	Addition a1 = new Addition(new Constant(25.0), new Variable("foo"));
 	Addition a2 = new Addition(new Constant(25.0), new Variable("foo"));
-	assertEquals(a2, a1.eval(vars));
+	assertEquals(a2, evaluator.evaluate(a1, vars));
     }
 }
