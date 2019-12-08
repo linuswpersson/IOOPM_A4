@@ -13,18 +13,22 @@ public class Namedconstant extends Atom{
 	this.identifier = identifier;
     }
 
+    @Override
     public int isConstant() {
 	return 2;
     }
 
+    @Override
     public double getValue() {
         return this.value;
     }
 
+    @Override
     public String toString() {
 	return this.identifier;
     }
 
+    @Override
     public boolean equals(Object other) {
 	if (other instanceof Namedconstant) {
 	    return this.equals((Namedconstant) other);

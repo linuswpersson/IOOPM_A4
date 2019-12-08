@@ -11,14 +11,17 @@ public class Constant extends Atom{
 	this.value = value;
     }
 
+    @Override
     public int isConstant() {
 	return 1;
     }
 
+    @Override
     public double getValue() {
         return this.value;
     }
 
+    @Override
     public String toString() {
 	return String.valueOf(this.value);
     }
@@ -33,6 +36,7 @@ public class Constant extends Atom{
      *@param other, constant to compare
      *@return false if other is not an instance of Constant otherwise true
      */
+    @Override
     public boolean equals(Object other) {
 	if (other instanceof Constant) {
 	    return this.equals((Constant) other);

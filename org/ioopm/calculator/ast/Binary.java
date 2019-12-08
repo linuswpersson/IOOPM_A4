@@ -16,6 +16,7 @@ public abstract class Binary extends SymbolicExpression {
     /**Checks if parenthesis are needed in binary expression and converts to string
      *@return string representation with paranthesis if needed
      */
+    @Override
     public String toString() {
 	int P = this.getPriority();
 	String leftString = this.lhs.toString();
@@ -36,6 +37,7 @@ public abstract class Binary extends SymbolicExpression {
      *@param other (left or right side of binary expression)
      *@return false if other is not an instance of binary otherwise true
      */
+    @Override
     public boolean equals(Object other) {
 	if (other instanceof Binary) {
 	    return this.equals((Binary) other);

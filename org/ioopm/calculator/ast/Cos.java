@@ -10,6 +10,7 @@ public class Cos extends Unary{
 	super(hs);
     }
 
+    @Override
     public String getName() {
         return "cos";
     }

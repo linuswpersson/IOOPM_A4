@@ -7,6 +7,7 @@ public class Negation extends Unary {
 	super(hs);
     }
 
+    @Override
     public String getName() {
         return "-";
     }

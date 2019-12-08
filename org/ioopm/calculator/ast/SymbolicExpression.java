@@ -40,7 +40,6 @@ public abstract class SymbolicExpression {
 	throw new RuntimeException("getValue() called on non-constant");
     }
 
-
     public SymbolicExpression accept(Visitor v) {
         return this;
     }

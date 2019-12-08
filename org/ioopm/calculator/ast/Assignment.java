@@ -10,10 +10,12 @@ public class Assignment extends Binary {
 	super(lhs, rhs);
     }
 
+    @Override
     public String getName() {
 	return "=";
     }
 
+    @Override
     public int getPriority() {
         return 3;
     }

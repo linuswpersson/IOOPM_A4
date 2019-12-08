@@ -5,24 +5,14 @@ public class EvaluationVisitor implements Visitor {
 
     public SymbolicExpression evaluate(SymbolicExpression topLevel, Environment env) {
 	this.env = env;
+	NamedConstantChecker ncc = new NamedConstantChecker();
+	ncc.check(topLevel);
 	return topLevel.accept(this);
     }
-
-    // This method gets called from Addition.accept(Visitor v) -- you should
-    // be able to see from the eval() methods how these should behave (i.e., 
-    // compare this method with your Addition::eval() and Symbolic.addition) 
+    
     public SymbolicExpression visit(Addition n) {
-	// Visit the left hand side and right hand side subexpressions
 	SymbolicExpression lArg = n.getLhs().accept(this);
 	SymbolicExpression rArg = n.getRhs().accept(this);
-	// When we come back here, the visitor has visited all subexpressions, 
-	// meaning left and right point to newly created trees reduced to 
-	// the extent possible (best case -- both are constants)
-
-	// If subexpressions are fully evaluated, replace them in
-	// the tree with a constant whose value is the sub of the
-	// subexpressions, if not, simply construct a new addition
-	// node from the new subexpressions
 	if (rArg.isConstant() > 0 && lArg.isConstant() > 0) {
 	    return new Constant(lArg.getValue() + rArg.getValue());
 	} else {

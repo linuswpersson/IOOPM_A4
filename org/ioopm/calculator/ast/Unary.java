@@ -13,12 +13,15 @@ public abstract class Unary extends SymbolicExpression {
  * Converts a unary tree to a string with perentesis if needed.
  * @return String representation of the unary tree.
  */
+    @Override
     public String toString() {
 	if(this.hs.getPriority() > 0){
 	    return this.getName() + " " + "(" + this.hs.toString() + ")"; 
 	}
 	return this.getName() + " " + this.hs.toString();
     }
+
+    @Override
     public boolean equals(Object other) {
 	if (other instanceof Unary) {
 	    return this.equals((Unary) other);

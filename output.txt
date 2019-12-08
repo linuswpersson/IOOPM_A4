@@ -31,11 +31,11 @@ Please enter an expression:
 Please enter an expression: 
 250.0
 Please enter an expression: 
-{g=6.0, x=pi, y=z + 2.0, z=3.0, f=z + 2.0}
+Variables: f = z + 2.0, g = 6.0, x = pi, y = z + 2.0, z = 3.0, 
 Please enter an expression: 
 Variables cleared.
 Please enter an expression: 
-{}
+Variables: 
 Please enter an expression: 
 11.0
 Please enter an expression: 
@@ -43,7 +43,7 @@ Syntax Error: Invalid input
 Please enter an expression: 
 3.155336037465062
 Please enter an expression: 
-{g=2.0, d=2.0, f=11.0}
+Variables: d = 2.0, f = 11.0, g = 2.0, 
 Please enter an expression: 
 -20.0
 Please enter an expression: 

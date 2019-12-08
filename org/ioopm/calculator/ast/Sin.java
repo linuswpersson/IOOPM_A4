@@ -7,6 +7,7 @@ public class Sin extends Unary {
 	super(hs);
     }
 
+    @Override
     public String getName() {
         return "sin";
     }

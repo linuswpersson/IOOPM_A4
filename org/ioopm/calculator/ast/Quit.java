@@ -19,6 +19,7 @@ public class Quit extends Command {
 	return v.visit(this);
     }
 
+    @Override
     public boolean isCommand() {
 	return true;
     }
