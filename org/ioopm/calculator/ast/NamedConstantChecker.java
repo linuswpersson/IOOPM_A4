@@ -15,7 +15,7 @@ public class NamedConstantChecker implements Visitor {
     public SymbolicExpression visit(Assignment a) {
 	a.getLhs().accept(this);
 	if (a.getRhs().isConstant() == 2) {
-	    throw new IllegalExpressionException("assignment to named constant now allowed:\n" + a.toString());
+	    throw new IllegalExpressionException("assignment to named constant not allowed:\n" + a.toString());
 	}
 	return a;
     }

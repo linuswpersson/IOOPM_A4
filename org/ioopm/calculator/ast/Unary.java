@@ -42,7 +42,4 @@ public abstract class Unary extends SymbolicExpression {
     public SymbolicExpression getHs() {
 	return this.hs;
     }
-
-    
-
 }

@@ -15,7 +15,6 @@ class Calculator {
     private static int expressionsEntered = 0;
     private static int successEvaluated = 0;
     private static int fullyEvaluated = 0;
-
     
     	/**
 	 * Main function for the calculator.
@@ -23,12 +22,19 @@ class Calculator {
     public static void main(String[] args) {
         Environment vars = new Environment();
 	boolean event = true;
+	int mode = 0;
 	System.out.println("Welcome to the parser!");
        	System.out.print("Please enter an expression: ");
 	Scanner sc = new Scanner(System.in);
 	String expression = sc.nextLine();
 	CalculatorParser p = new CalculatorParser(expression);
-	final EvaluationVisitor evaluator = new EvaluationVisitor();
+        final EvaluationVisitor eval = new EvaluationVisitor();
+	final FullEvaluationVisitor fullEval = new FullEvaluationVisitor();
+	if(args.length > 0){
+	    if(args[0].equals("--not-symbolic")) {
+		mode++;
+	    }
+	}
 	while(event) {
 	    try {
 		SymbolicExpression result = p.parse();
@@ -47,13 +53,22 @@ class Calculator {
 		}
 		else {
 		    
-		    SymbolicExpression evaluation = evaluator.evaluate(result, vars);
+		    SymbolicExpression evaluation;
+		    if(mode == 0) {
+			evaluation = eval.evaluate(result, vars);
+		    }
+		    else {
+			evaluation = fullEval.evaluate(result, vars);
+		    }
 		    successEvaluated++;
 		    if (evaluation.isConstant() > 0){
 		    	fullyEvaluated++;
 		    }
 		    System.out.println(evaluation);
 		}
+	    }catch(UndefinedVariableException e) {
+	        System.out.print("Error:");
+	        System.out.println(e.getMessage());
 	    }catch(IllegalExpressionException e) {
 		System.out.print("Assignment Error: ");
 	        System.out.println(e.getMessage());

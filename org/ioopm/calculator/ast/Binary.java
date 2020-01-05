@@ -10,7 +10,9 @@ public abstract class Binary extends SymbolicExpression {
 
     public Binary(SymbolicExpression lhs, SymbolicExpression rhs){
 	this.lhs = lhs;
+	this.lhs.set_parent(this);
 	this.rhs = rhs;
+	this.rhs.set_parent(this);
     }
 
     /**Checks if parenthesis are needed in binary expression and converts to string

@@ -5,6 +5,7 @@ import java.util.HashMap;
  * Top-class of the AST that all other node-types inherites from.
  */
 public abstract class SymbolicExpression {
+    private SymbolicExpression parent = null;
 
     /** 
      *  Used to check whether a SymbolicExpression is a variable, namedconstant, or other.
@@ -46,5 +47,13 @@ public abstract class SymbolicExpression {
 
     public boolean isCommand() {
 	return false;
+    }
+
+    public void set_parent(SymbolicExpression parent) {
+	this.parent = parent;
+    }
+
+    public SymbolicExpression get_parent() {
+	return this.parent;
     }
 }

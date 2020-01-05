@@ -1,6 +1,6 @@
 package org.ioopm.calculator.ast;
 
-public class EvaluationVisitor implements Visitor {
+public class FullEvaluationVisitor implements Visitor {
     private Environment env = null;
 
     public SymbolicExpression evaluate(SymbolicExpression topLevel, Environment env) {
@@ -117,8 +117,11 @@ public class EvaluationVisitor implements Visitor {
 	if(this.env.containsKey(n)){
 	    return this.env.get(n);
 	}else {
-	    String arg = n.getName();
-	    return new Variable(arg);
+	    SymbolicExpression topLevel = n;
+	    while(topLevel.get_parent() != null) {
+		topLevel = topLevel.get_parent();
+	    }
+	    throw new UndefinedVariableException(" '" + n.getName() + "' is undefined in \n" + n.get_parent() + " in \n" + "    " + topLevel);
 	}
     }
 

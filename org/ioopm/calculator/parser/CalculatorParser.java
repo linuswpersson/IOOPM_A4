@@ -93,10 +93,16 @@ public class CalculatorParser {
 
     private SymbolicExpression factor() throws IOException {
 	SymbolicExpression result;
-        if (this.st.nextToken() == '('){
+	this.st.nextToken();
+        if (this.st.ttype == '('){
             result = assignment();
             if (this.st.nextToken() != ')') {
                 throw new SyntaxErrorException("expected ')'");
+	    }
+	} else if (this.st.ttype == '{'){
+	    result = assignment();
+            if (this.st.nextToken() != '}') {
+                throw new SyntaxErrorException("expected '}'");
             }
         } else {
             this.st.pushBack();
