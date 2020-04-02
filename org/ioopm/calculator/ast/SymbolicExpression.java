@@ -9,7 +9,7 @@ public abstract class SymbolicExpression {
 
     /** 
      *  Used to check whether a SymbolicExpression is a variable, namedconstant, or other.
-     * @return 0 if other, 1 if variable, or 2 if namedconstant.
+     * @return 0 if other, 1 if constant, or 2 if namedconstant.
      */
     public int isConstant() {
 	return 0;

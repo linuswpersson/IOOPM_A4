@@ -4,20 +4,15 @@ import java.util.HashMap;
 /**
  *Node representation of Scope
  */
-public class Scope extends Binary {
+public class Scope extends Unary {
     
-    public Assignment(SymbolicExpression lhs, SymbolicExpression rhs){
-	super(lhs, rhs);
+    public Scope(SymbolicExpression hs){
+	super(hs);
     }
 
     @Override
-    public String getName() {
-	return "=";
-    }
-
-    @Override
-    public int getPriority() {
-        return 4;
+    public String toString() {
+	return "{" + this.getHs().toString() + "}";
     }
 
     @Override

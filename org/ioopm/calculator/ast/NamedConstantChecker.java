@@ -6,6 +6,14 @@ public class NamedConstantChecker implements Visitor {
 	return topLevel.accept(this);
     }
 
+    public SymbolicExpression visit(Conditional a) {
+	a.getLhs().accept(this);
+	a.getRhs().accept(this);
+	a.getTru().accept(this);
+	a.getFal().accept(this);
+	return a;
+    }
+
     public SymbolicExpression visit(Addition a) {
 	a.getLhs().accept(this);
 	a.getRhs().accept(this);
@@ -21,6 +29,11 @@ public class NamedConstantChecker implements Visitor {
     }
 
     public SymbolicExpression visit(Constant a) {
+	return a;
+    }
+
+    public SymbolicExpression visit(Scope a) {
+	a.getHs().accept(this);
 	return a;
     }
 

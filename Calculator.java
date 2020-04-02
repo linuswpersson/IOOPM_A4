@@ -20,25 +20,20 @@ class Calculator {
 	 * Main function for the calculator.
 	 */
     public static void main(String[] args) {
+
+	HashMap<String, FunctionDeclaration> functionMap = new HashMap<String, FunctionDeclaration>();
+	
         Environment vars = new Environment();
 	boolean event = true;
-	int mode = 0;
 	System.out.println("Welcome to the parser!");
        	System.out.print("Please enter an expression: ");
 	Scanner sc = new Scanner(System.in);
 	String expression = sc.nextLine();
 	CalculatorParser p = new CalculatorParser(expression);
         final EvaluationVisitor eval = new EvaluationVisitor();
-	final FullEvaluationVisitor fullEval = new FullEvaluationVisitor();
-	if(args.length > 0){
-	    if(args[0].equals("--not-symbolic")) {
-		mode++;
-	    }
-	}
 	while(event) {
 	    try {
 		SymbolicExpression result = p.parse();
-
 		if (result.isCommand()) {
 		    if(result == Quit.instance()) {
 			event = false;
@@ -51,15 +46,27 @@ class Calculator {
 			System.out.println("Variables cleared.");
 		    }
 		}
+
+
+
+		
+		else if(result instanceof FunctionDeclaration){
+		    FunctionDeclaration newfunc = result;
+		    Sequence body = new Sequence();
+		    
+		    do{
+			result = p.parse();
+			body.addLine(result)
+		    } while(result.name == "end");
+		    
+		    newfunc.addBody(body);
+		    functionMap.put(newfunc.getName(), newfunc);
+		    
+		}
 		else {
 		    
 		    SymbolicExpression evaluation;
-		    if(mode == 0) {
-			evaluation = eval.evaluate(result, vars);
-		    }
-		    else {
-			evaluation = fullEval.evaluate(result, vars);
-		    }
+		    evaluation = eval.evaluate(result, vars);
 		    successEvaluated++;
 		    if (evaluation.isConstant() > 0){
 		    	fullyEvaluated++;

@@ -19,8 +19,9 @@ public class CalculatorParser {
         this.st.ordinaryChar('-');
 	this.st.ordinaryChar('/');
 	this.st.ordinaryChar('+');
-	this.st.ordinaryChar('=');
 	this.st.ordinaryChar('*');
+	this.st.ordinaryChar('{');
+	this.st.ordinaryChar('}');
         this.st.eolIsSignificant(true);
     }
     	/**
@@ -31,8 +32,9 @@ public class CalculatorParser {
 	this.st.ordinaryChar('-');
 	this.st.ordinaryChar('/');
        	this.st.ordinaryChar('+');
-	this.st.ordinaryChar('=');
 	this.st.ordinaryChar('*');
+	this.st.ordinaryChar('{');
+	this.st.ordinaryChar('}');
         this.st.eolIsSignificant(true);
     }
 
@@ -99,11 +101,6 @@ public class CalculatorParser {
             if (this.st.nextToken() != ')') {
                 throw new SyntaxErrorException("expected ')'");
 	    }
-	} else if (this.st.ttype == '{'){
-	    result = assignment();
-            if (this.st.nextToken() != '}') {
-                throw new SyntaxErrorException("expected '}'");
-            }
         } else {
             this.st.pushBack();
             result = unary();
@@ -129,15 +126,101 @@ public class CalculatorParser {
 	    else if (operation.equals("log")) {
 		return new Log(factor());
 	    }
+	    
 	}
 	this.st.pushBack();
 	if (this.st.nextToken() == '-') {
 	    return new Negation(factor());
 	}
-	else{
-	    this.st.pushBack();
-	    return number();
+	
+	else if (this.st.ttype == '{'){
+	    SymbolicExpression result;
+	    result = assignment();
+	    if (this.st.nextToken() != '}') {
+		throw new SyntaxErrorException("expected '}'");
+	    }
+	    return new Scope(result);
 	}
+	else {
+	    this.st.pushBack();
+	    return conditional();
+	}
+    }
+
+    private SymbolicExpression conditional() throws IOException {
+	this.st.nextToken();
+	if(this.st.sval != null) {
+	    String tmpS = this.st.sval;
+	    if(tmpS.equals("if")) {
+	        SymbolicExpression lhs;
+		lhs = expression();
+		int op = opHelper();
+		SymbolicExpression rhs;
+		rhs = expression();
+		if(this.st.nextToken() != '{') {
+		    throw new SyntaxErrorException("expected '{'");
+		}
+		SymbolicExpression tru;
+		tru = assignment();
+		if(this.st.nextToken() != '}') {
+		    throw new SyntaxErrorException("expected '}'");
+		}
+		this.st.nextToken();
+		if(this.st.sval != null) {
+		    tmpS = this.st.sval;
+		    if(!tmpS.equals("else")) {
+			throw new SyntaxErrorException("expected 'else'");
+		    }
+		    else{
+			if(this.st.nextToken() != '{') {
+			    throw new SyntaxErrorException("expected '{'");
+			}
+			SymbolicExpression fal;
+			fal = assignment();
+			if(this.st.nextToken() != '}') {
+			    throw new SyntaxErrorException("expected '}'");
+			}
+			return new Conditional(lhs, rhs, tru, fal, op);
+		    }
+		}
+		else{
+		    throw new SyntaxErrorException("expected 'else'");
+		}		
+	    }
+	}
+	this.st.pushBack();
+	return number();
+    }	
+
+    private int opHelper() throws IOException {
+	this.st.nextToken();
+	int op = 0;
+	int tmpC = this.st.ttype;
+	switch(tmpC) {
+	case '<':
+	    if(this.st.nextToken() == '=') {
+		op = 3;
+	        return op;
+	    }
+	    this.st.pushBack();
+	    tmpC = this.st.ttype;
+	    op = 1;
+	    return op;
+	case '>':
+	    if(this.st.nextToken() == '=') {
+		op = 4;
+		return op;
+	    }
+	    this.st.pushBack();
+	    op = 2;
+	    return op;
+	case '=':
+	    if(this.st.nextToken() == '=') {
+		op = 5;
+		return op;
+	    }
+	}
+        throw new SyntaxErrorException("Invalid conditional input.");
     }
 
     private SymbolicExpression number() throws IOException {

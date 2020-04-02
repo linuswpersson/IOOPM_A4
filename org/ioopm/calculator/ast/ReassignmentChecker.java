@@ -2,11 +2,21 @@ package org.ioopm.calculator.ast;
 import java.util.*;
 
 public class ReassignmentChecker implements Visitor {
-    private LinkedList<String> list = null;
+    private Stack<Environment> envStack = new Stack<Environment>();
     
     public SymbolicExpression check(SymbolicExpression topLevel) {
-	this.list = new LinkedList<String>();
-	return topLevel.accept(this);
+	this.envStack.push(new Environment());
+	SymbolicExpression checked = topLevel.accept(this);
+	this.envStack.clear();
+	return checked;
+    }
+
+    public SymbolicExpression visit(Conditional a) {
+	a.getLhs().accept(this);
+	a.getRhs().accept(this);
+	a.getTru().accept(this);
+	a.getFal().accept(this);
+	return a;
     }
 
     public SymbolicExpression visit(Addition a) {
@@ -16,17 +26,26 @@ public class ReassignmentChecker implements Visitor {
     }
 
     public SymbolicExpression visit(Assignment a) {
-	a.getLhs().accept(this);
-	String rhs = a.getRhs().toString();
-	if (this.list.contains(rhs)){
-	    throw new IllegalExpressionException("the variable " + rhs + " is reassigned.");
+	SymbolicExpression lArg = a.getLhs().accept(this);
+	SymbolicExpression rArg = a.getRhs();
+	Environment currEnv = this.envStack.peek();
+	if (currEnv.containsKey(rArg)){
+	    this.envStack.clear();
+	    throw new IllegalExpressionException("the variable " + rArg + " is reassigned.");
 	}
-	this.list.add(rhs);
+	currEnv.put((Variable)rArg, lArg);
 	return a;
     }
 
     public SymbolicExpression visit(Constant a) {
 	return a;
+    }
+
+    public SymbolicExpression visit(Scope a) {
+	this.envStack.push(new Environment());
+	a.getHs().accept(this);
+	envStack.pop();
+	return a;	
     }
 
     public SymbolicExpression visit(Cos a) {
