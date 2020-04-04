@@ -33,7 +33,7 @@ class Calculator {
         final EvaluationVisitor eval = new EvaluationVisitor();
 	while(event) {
 	    try {
-		SymbolicExpression result = p.parse();
+		SymbolicExpression result = p.parse(functionMap);
 		if (result.isCommand()) {
 		    if(result == Quit.instance()) {
 			event = false;
@@ -50,19 +50,29 @@ class Calculator {
 
 
 		
-		else if(result instanceof FunctionDeclaration){
-		    FunctionDeclaration newfunc = result;
+		else if(result.isFuncDec()){
+
+		    FunctionDeclaration funcDec = new FunctionDeclaration(result.getName(), result.getArgs());
+		    SymbolicExpression newLine;
 		    Sequence body = new Sequence();
+
+		    newLine = p.parse(functionMap);
+		    while(newLine.toString() != "end"){
+		    	body.addLine(newLine);
+		    	newLine = p.parse(functionMap);
+		    }
+		    if(body.getBody().size() == 0){
+		        throw new SyntaxErrorException("Empty function not allowed.");
+		    }
 		    
-		    do{
-			result = p.parse();
-			body.addLine(result)
-		    } while(result.name == "end");
-		    
-		    newfunc.addBody(body);
-		    functionMap.put(newfunc.getName(), newfunc);
+		    funcDec.addBody(body);
+		    functionMap.put(funcDec.getName(), funcDec);
 		    
 		}
+
+
+
+		
 		else {
 		    
 		    SymbolicExpression evaluation;

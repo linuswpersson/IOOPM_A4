@@ -1,4 +1,5 @@
 package org.ioopm.calculator.parser;
+import java.util.*;
 import java.io.StreamTokenizer;
 import java.io.IOException;
 import org.ioopm.calculator.ast.*;
@@ -22,6 +23,7 @@ public class CalculatorParser {
 	this.st.ordinaryChar('*');
 	this.st.ordinaryChar('{');
 	this.st.ordinaryChar('}');
+	this.st.ordinaryChar(',');
         this.st.eolIsSignificant(true);
     }
     	/**
@@ -35,6 +37,7 @@ public class CalculatorParser {
 	this.st.ordinaryChar('*');
 	this.st.ordinaryChar('{');
 	this.st.ordinaryChar('}');
+	this.st.ordinaryChar(',');
         this.st.eolIsSignificant(true);
     }
 
@@ -43,13 +46,38 @@ public class CalculatorParser {
      * @return A parsed SymbolicExpression tree of the input.
      * @throws IOException, SyntaxErrorException.
      */
-    public SymbolicExpression parse() throws IOException {
-	SymbolicExpression result = assignment();
-	return result;
+    public SymbolicExpression parse(HashMap<String, FunctionDeclaration> functionMap) throws IOException {
+	return funcDef(functionMap);
     }
 
-    private SymbolicExpression assignment() throws IOException {
-	SymbolicExpression result = expression();
+    public SymbolicExpression funcDef(HashMap<String, FunctionDeclaration> functionMap) throws IOException {
+	this.st.nextToken();
+        if(this.st.sval != null) {
+	    String function = this.st.sval;
+	    if(function.equalsIgnoreCase("function")){
+
+		this.st.nextToken();
+		if(this.st.sval == null){
+		    
+		}
+		String funcName = this.st.sval;
+		
+		SymbolicExpression result;
+		LinkedList<SymbolicExpression> argList = new LinkedList<SymbolicExpression>();
+		this.st.nextToken();
+		for(int i = 0; this.st.ttype == ')'; i++) {
+		    result = number();
+		    argList.add(result);
+		    this.st.nextToken();
+		}
+		return new FunctionDeclaration(funcName, argList);
+	    }
+	}
+	return assignment(functionMap);
+    }
+
+    private SymbolicExpression assignment(HashMap<String, FunctionDeclaration> functionMap) throws IOException {
+	SymbolicExpression result = expression(functionMap);
 	this.st.nextToken();
 	while (this.st.ttype == '=') {
 	    result = new Assignment(result, variable());
@@ -59,15 +87,15 @@ public class CalculatorParser {
 	return result;
     }
 
-    private SymbolicExpression expression() throws IOException{
-	SymbolicExpression result = term();
+    private SymbolicExpression expression(HashMap<String, FunctionDeclaration> functionMap) throws IOException{
+	SymbolicExpression result = term(functionMap);
 	this.st.nextToken();
 	while (this.st.ttype == '+' || this.st.ttype == '-') {
 	    int operation = this.st.ttype;
 	    if (operation == '+') {
-	        result = new Addition(result, term());
+	        result = new Addition(result, term(functionMap));
 	    } else {
-	        result = new Subtraction(result, term());
+	        result = new Subtraction(result, term(functionMap));
 	    }
 	      this.st.nextToken();
 	}
@@ -77,15 +105,15 @@ public class CalculatorParser {
 
     }
 
-    private SymbolicExpression term() throws IOException {
-	SymbolicExpression result = factor();
+    private SymbolicExpression term(HashMap<String, FunctionDeclaration> functionMap) throws IOException {
+	SymbolicExpression result = function(functionMap);
 	this.st.nextToken();
 	while (this.st.ttype == '*' || this.st.ttype == '/') {
 	    int operation = this.st.ttype;
 	    if (operation == '*') {
-	        result = new Multiplication(result, factor());
+	        result = new Multiplication(result, function(functionMap));
 	    } else {
-	        result = new Division(result, factor());
+	        result = new Division(result, function(functionMap));
 	    }
 	    this.st.nextToken();
 	}
@@ -93,49 +121,81 @@ public class CalculatorParser {
 	return result;
     }
 
-    private SymbolicExpression factor() throws IOException {
+    private SymbolicExpression function(HashMap<String, FunctionDeclaration> functionMap) throws IOException {
+	this.st.nextToken();
+	if (this.st.sval != null){
+	    String function = this.st.sval;
+	    if(functionMap.containsKey(function)) {
+
+		SymbolicExpression result;
+		FunctionDeclaration funcDec = functionMap.get(function);
+		int argsSize = funcDec.getArgSize();
+		LinkedList<SymbolicExpression> valList = new LinkedList<SymbolicExpression>();
+
+		this.st.nextToken();
+		int i = 0;
+		for( ; this.st.ttype == ')'; i++) {
+		    result = number();
+		    valList.add(result);
+		    this.st.nextToken();
+		}
+
+	        if(i < argsSize){
+		    throw new SyntaxErrorException("Error, function " + function + " called with to few arguments. Expected " + argsSize + ", got " + i + ".");
+		}
+		if(i > argsSize){
+		    throw new SyntaxErrorException("Error, function " + function + " called with to many arguments. Expected " + argsSize + ", got " + i + ".");
+		}
+		return new FunctionCall(function, funcDec.getArgs(), valList, funcDec.getBody());
+	    }
+	}
+	this.st.pushBack();
+	return factor(functionMap);
+    }
+
+    private SymbolicExpression factor(HashMap<String, FunctionDeclaration> functionMap) throws IOException {
 	SymbolicExpression result;
 	this.st.nextToken();
         if (this.st.ttype == '('){
-            result = assignment();
+            result = assignment(functionMap);
             if (this.st.nextToken() != ')') {
                 throw new SyntaxErrorException("expected ')'");
 	    }
         } else {
             this.st.pushBack();
-            result = unary();
+            result = unary(functionMap);
         }
         return result;
     }
 
-    private SymbolicExpression unary() throws IOException {
+    private SymbolicExpression unary(HashMap<String, FunctionDeclaration> functionMap) throws IOException {
 	this.st.nextToken();
         if (this.st.sval != null) {
 	    String operation = this.st.sval;
 	    if (operation.equals("sin")) {
-		return new Sin(factor());
+		return new Sin(factor(functionMap));
 	    }
 	    else if (operation.equals("cos")) {
-		return new Cos(factor());
+		return new Cos(factor(functionMap));
 	    }
 
 	    else if (operation.equals("exp")) {
-		return new Exp(factor());
+		return new Exp(factor(functionMap));
 	    }
 
 	    else if (operation.equals("log")) {
-		return new Log(factor());
+		return new Log(factor(functionMap));
 	    }
 	    
 	}
 	this.st.pushBack();
 	if (this.st.nextToken() == '-') {
-	    return new Negation(factor());
+	    return new Negation(factor(functionMap));
 	}
 	
 	else if (this.st.ttype == '{'){
 	    SymbolicExpression result;
-	    result = assignment();
+	    result = assignment(functionMap);
 	    if (this.st.nextToken() != '}') {
 		throw new SyntaxErrorException("expected '}'");
 	    }
@@ -143,25 +203,25 @@ public class CalculatorParser {
 	}
 	else {
 	    this.st.pushBack();
-	    return conditional();
+	    return conditional(functionMap);
 	}
     }
 
-    private SymbolicExpression conditional() throws IOException {
+    private SymbolicExpression conditional(HashMap<String, FunctionDeclaration> functionMap) throws IOException {
 	this.st.nextToken();
 	if(this.st.sval != null) {
 	    String tmpS = this.st.sval;
 	    if(tmpS.equals("if")) {
 	        SymbolicExpression lhs;
-		lhs = expression();
+		lhs = expression(functionMap);
 		int op = opHelper();
 		SymbolicExpression rhs;
-		rhs = expression();
+		rhs = expression(functionMap);
 		if(this.st.nextToken() != '{') {
 		    throw new SyntaxErrorException("expected '{'");
 		}
 		SymbolicExpression tru;
-		tru = assignment();
+		tru = assignment(functionMap);
 		if(this.st.nextToken() != '}') {
 		    throw new SyntaxErrorException("expected '}'");
 		}
@@ -176,7 +236,7 @@ public class CalculatorParser {
 			    throw new SyntaxErrorException("expected '{'");
 			}
 			SymbolicExpression fal;
-			fal = assignment();
+			fal = assignment(functionMap);
 			if(this.st.nextToken() != '}') {
 			    throw new SyntaxErrorException("expected '}'");
 			}

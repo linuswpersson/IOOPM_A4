@@ -1,5 +1,5 @@
 package org.ioopm.calculator.ast;
-import java.util.HashMap;
+import java.util.*;
 
 /** 
  * Top-class of the AST that all other node-types inherites from.
@@ -55,5 +55,13 @@ public abstract class SymbolicExpression {
 
     public SymbolicExpression get_parent() {
 	return this.parent;
+    }
+
+    public LinkedList<SymbolicExpression> getArgs(){
+        throw new RuntimeException("getArgs() called on non-func");
+    }
+
+    public boolean isFuncDec(){
+	return false;
     }
 }

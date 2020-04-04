@@ -1,5 +1,5 @@
 package org.ioopm.calculator.ast;
-import java.util.Stack;
+import java.util.*;
 
 public class EvaluationVisitor implements Visitor {
     private Stack<Environment> envStack = new Stack<Environment>();
@@ -189,6 +189,29 @@ public class EvaluationVisitor implements Visitor {
 	else{
 	    return n;
 	}
+    }
+
+    public SymbolicExpression visit(FunctionCall n) {
+
+        Sequence body = n.getBody();
+	LinkedList<SymbolicExpression> argsList = n.getArgs();
+	LinkedList<SymbolicExpression> valsList = n.getVals();
+	if(n.getArgSize() != 0){
+	    for(int i = 0; i < n.getArgSize(); i++){
+		body.addFirst(new Assignment(valsList.get(i), argsList.get(i)));
+	    }
+	}
+	Scope fc = new Scope(body);
+	return fc.accept(this);
+    }
+
+    public SymbolicExpression visit(Sequence n){
+	LinkedList<SymbolicExpression> list = n.getBody();
+	int i = 1;
+	for( ; i < list.size(); i++){
+	    list.get(i).accept(this);
+	}
+	return list.get(i).accept(this);
     }
 
     public SymbolicExpression visit(Quit n) {

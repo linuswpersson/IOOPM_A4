@@ -1,15 +1,19 @@
 package org.ioopm.calculator.ast;
-import java.util.HashMap;
+import java.util.*;
 /**
  * class for functionCalls.
  */
-public class FunctionCall {
+public class FunctionCall extends SymbolicExpression {
     private String name;
-    private LinkedList<Atom> argList;
+    private LinkedList<SymbolicExpression> argList;
+    private LinkedList<SymbolicExpression> valList;
+    private Sequence body;
     
-    public FunctionCall(String name, LinkedList<Atom> argList) {
+    public FunctionCall(String name, LinkedList<SymbolicExpression> argList, LinkedList<SymbolicExpression> valList, Sequence body) {
 	this.name = name;
 	this.argList = argList;
+	this.valList = valList;
+	this.body = body;
     }
 
     @Override
@@ -17,22 +21,39 @@ public class FunctionCall {
 	return this.name;
     }
 
-    @Override
-    public boolean equals(Object other) {
-	if (other instanceof FunctionCall) {
-	    return this.equals((FunctionCall) other);
-	} else {
-	    return false;
-	}
-    }
+    // @Override
+    // public boolean equals(Object other) {
+    // 	if (other instanceof FunctionCall) {
+    // 	    return this.equals((FunctionCall) other);
+    // 	} else {
+    // 	    return false;
+    // 	}
+    // }
 
-    public boolean equals(FunctionCall other) {
-	return this.name.equals(other.name);
-    }
+    // public boolean equals(FunctionCall other) {
+    // 	return this.name.equals(other.name);
+    // }
 
     @Override
     public String getName() {
 	return this.name;
+    }
+
+    public Sequence getBody(){
+	return this.body;
+    }
+
+
+    public LinkedList<SymbolicExpression> getArgs(){
+	return this.argList;
+    }
+
+    public LinkedList<SymbolicExpression> getVals(){
+	return this.valList;
+    }
+
+    public Integer getArgSize(){
+	return this.argList.size();
     }
 
     @Override

@@ -1,5 +1,5 @@
 package org.ioopm.calculator.ast;
-import java.util.HashMap;
+import java.util.*;
 
 /**
  *Node representation of Scope
