@@ -21,7 +21,7 @@ class Calculator {
 	 */
     public static void main(String[] args) {
 
-	HashMap<String, FunctionDeclaration> functionMap = new HashMap<String, FunctionDeclaration>();
+	final HashMap<String, FunctionDeclaration> functionMap = new HashMap<String, FunctionDeclaration>();
 	
         Environment vars = new Environment();
 	boolean event = true;
@@ -52,6 +52,9 @@ class Calculator {
 		
 		else if(result.isFuncDec()){
 		    FunctionDeclaration funcDec = new FunctionDeclaration(result.getName(), result.getArgs());
+		    
+		    functionMap.put(funcDec.getName(), funcDec);
+	    
 		    SymbolicExpression newLine;
 		    Sequence body = new Sequence();
 

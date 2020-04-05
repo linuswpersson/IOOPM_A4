@@ -24,6 +24,8 @@ public class CalculatorParser {
 	this.st.ordinaryChar('{');
 	this.st.ordinaryChar('}');
 	this.st.ordinaryChar(',');
+	this.st.ordinaryChar('(');
+	this.st.ordinaryChar(')');
         this.st.eolIsSignificant(true);
     }
     	/**
@@ -38,6 +40,8 @@ public class CalculatorParser {
 	this.st.ordinaryChar('{');
 	this.st.ordinaryChar('}');
 	this.st.ordinaryChar(',');
+	this.st.ordinaryChar('(');
+	this.st.ordinaryChar(')');
         this.st.eolIsSignificant(true);
     }
 
@@ -131,7 +135,6 @@ public class CalculatorParser {
 		SymbolicExpression result;
 		FunctionDeclaration funcDec = functionMap.get(function);
 		int argsSize = funcDec.getArgSize();
-		//System.out.println(argsSize);
 		LinkedList<SymbolicExpression> valList = new LinkedList<SymbolicExpression>();
 
 		this.st.nextToken();
@@ -149,7 +152,7 @@ public class CalculatorParser {
 		    throw new SyntaxErrorException("Error, function " + function + " called with to many arguments. Expected " + argsSize + ", got " + i + ".");
 		}
 	        System.out.println(valList.size());
-		return new FunctionCall(function, funcDec.getArgs(), valList, funcDec.getBody());
+		return new FunctionCall(function, valList, functionMap);
 	    }
 	}
 	this.st.pushBack();

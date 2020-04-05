@@ -5,15 +5,13 @@ import java.util.*;
  */
 public class FunctionCall extends SymbolicExpression {
     private String name;
-    private LinkedList<SymbolicExpression> argList;
     private LinkedList<SymbolicExpression> valList;
-    private Sequence body;
+    private HashMap<String, FunctionDeclaration> functionMap;
     
-    public FunctionCall(String name, LinkedList<SymbolicExpression> argList, LinkedList<SymbolicExpression> valList, Sequence body) {
+    public FunctionCall(String name, LinkedList<SymbolicExpression> valList, HashMap<String, FunctionDeclaration> functionMap) {
 	this.name = name;
-	this.argList = argList;
 	this.valList = valList;
-	this.body = body;
+	this.functionMap = functionMap;
     }
 
     @Override
@@ -21,31 +19,18 @@ public class FunctionCall extends SymbolicExpression {
 	return this.name;
     }
 
-    // @Override
-    // public boolean equals(Object other) {
-    // 	if (other instanceof FunctionCall) {
-    // 	    return this.equals((FunctionCall) other);
-    // 	} else {
-    // 	    return false;
-    // 	}
-    // }
-
-    // public boolean equals(FunctionCall other) {
-    // 	return this.name.equals(other.name);
-    // }
-
     @Override
     public String getName() {
 	return this.name;
     }
 
     public Sequence getBody(){
-	return this.body;
+	return functionMap.get(this.name).getBody();
     }
 
 
     public LinkedList<SymbolicExpression> getArgs(){
-	return this.argList;
+	return this.functionMap.get(this.name).getArgs();
     }
 
     public LinkedList<SymbolicExpression> getVals(){
@@ -53,7 +38,7 @@ public class FunctionCall extends SymbolicExpression {
     }
 
     public Integer getArgSize(){
-	return this.argList.size();
+	return this.getArgs().size();
     }
 
     @Override

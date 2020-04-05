@@ -16,44 +16,49 @@ public class EvaluationVisitor implements Visitor {
     public SymbolicExpression visit(Conditional n) {
 	SymbolicExpression lArg = n.getLhs().accept(this);
 	SymbolicExpression rArg = n.getRhs().accept(this);
-	SymbolicExpression tru = n.getTru().accept(this);
-	SymbolicExpression fal = n.getFal().accept(this);
 	if(lArg.isConstant() < 1 && rArg.isConstant() < 1) {
 	    throw new IllegalExpressionException("Conditional with non-constants not allowed.");
 	}
 	int op = n.getOp();
+	System.out.println("------------ COND INFO --------------");
+	System.out.println("left-arg: " + lArg);
+	System.out.println("right-arg: " + rArg);
+	System.out.println("Tru: " + n.getTru());
+	System.out.println("Tru: " + n.getFal());
+	System.out.println("OP: " + op);
+	System.out.println("------------ COND END  --------------");
 	if(op < 1 || op > 5){
 	    throw new IllegalExpressionException("Error: invalid operation value.");
 	}
         switch(op) {
 	case 1:
 	    if(lArg.getValue() < rArg.getValue()){
-		return tru;
+		return n.getTru().accept(this);
 	    }
 	    break;
 	case 2:
 	    if(lArg.getValue() > rArg.getValue()){
-		return tru;
+		return n.getTru().accept(this);
 	    }
 	    break;
 	case 3:
 	    if(lArg.getValue() <= rArg.getValue()){
-		return tru;
+		return n.getTru().accept(this);
 	    }
 	    break;
 	case 4:
 	    if(lArg.getValue() >= rArg.getValue()){
-		return tru;
+		return n.getTru().accept(this);
 	    }
 	    break;
 
 	case 5:
 	    if(lArg.getValue() == rArg.getValue()){
-		return tru;
+		return n.getTru().accept(this);
 	    }
 	    break;
 	}
-	return fal;
+	return n.getFal().accept(this);
     }
 	
 
@@ -199,7 +204,7 @@ public class EvaluationVisitor implements Visitor {
 	LinkedList<SymbolicExpression> asignmentList = new LinkedList<SymbolicExpression>();
 	if(n.getArgSize() != 0){
 	    for(int i = 0; i < n.getArgSize(); i++){
-		asignmentList.addFirst(new Assignment(valsList.get(i), argsList.get(i)));
+		asignmentList.addFirst(new Assignment(valsList.get(i).accept(this), argsList.get(i)));
 		System.out.println(valsList.get(i).toString());
 	    }
 	}
@@ -213,7 +218,7 @@ public class EvaluationVisitor implements Visitor {
 	LinkedList<SymbolicExpression> body = n.getBody();
 	int ii = 0;
 	for( ; ii < arg.size(); ii++){
-	    // System.out.println(arg.get(ii).toString());
+	    System.out.println(arg.get(ii).toString());
 	    arg.get(ii).accept(this);
 	}
 	int i = 0;
