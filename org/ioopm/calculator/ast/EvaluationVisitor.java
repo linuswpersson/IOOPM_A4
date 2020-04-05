@@ -196,22 +196,33 @@ public class EvaluationVisitor implements Visitor {
         Sequence body = n.getBody();
 	LinkedList<SymbolicExpression> argsList = n.getArgs();
 	LinkedList<SymbolicExpression> valsList = n.getVals();
+	LinkedList<SymbolicExpression> asignmentList = new LinkedList<SymbolicExpression>();
 	if(n.getArgSize() != 0){
 	    for(int i = 0; i < n.getArgSize(); i++){
-		body.addFirst(new Assignment(valsList.get(i), argsList.get(i)));
+		asignmentList.addFirst(new Assignment(valsList.get(i), argsList.get(i)));
+		System.out.println(valsList.get(i).toString());
 	    }
 	}
+	body.setArgs(asignmentList);
 	Scope fc = new Scope(body);
 	return fc.accept(this);
     }
 
     public SymbolicExpression visit(Sequence n){
-	LinkedList<SymbolicExpression> list = n.getBody();
-	int i = 1;
-	for( ; i < list.size(); i++){
-	    list.get(i).accept(this);
+	LinkedList<SymbolicExpression> arg = n.getArgs();
+	LinkedList<SymbolicExpression> body = n.getBody();
+	int ii = 0;
+	for( ; ii < arg.size(); ii++){
+	    // System.out.println(arg.get(ii).toString());
+	    arg.get(ii).accept(this);
 	}
-	return list.get(i).accept(this);
+	int i = 0;
+	for( ; i < body.size()-1; i++){
+	    System.out.println(body.get(i).toString());
+	    body.get(i).accept(this);
+	}
+	System.out.println(body.get(i).toString());
+	return body.get(i++).accept(this);
     }
 
     public SymbolicExpression visit(Quit n) {

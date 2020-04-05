@@ -51,15 +51,21 @@ class Calculator {
 
 		
 		else if(result.isFuncDec()){
-
 		    FunctionDeclaration funcDec = new FunctionDeclaration(result.getName(), result.getArgs());
 		    SymbolicExpression newLine;
 		    Sequence body = new Sequence();
 
+		    String str1 = sc.nextLine();
+		    p.updateString(str1);
 		    newLine = p.parse(functionMap);
-		    while(newLine.toString() != "end"){
-		    	body.addLine(newLine);
+		    body.addLine(newLine);
+		    int i = 0;
+		    while(i < 3){
+			String str2 = sc.nextLine();
+			p.updateString(str2);
 		    	newLine = p.parse(functionMap);
+		    	body.addLine(newLine);
+			i++;
 		    }
 		    if(body.getBody().size() == 0){
 		        throw new SyntaxErrorException("Empty function not allowed.");

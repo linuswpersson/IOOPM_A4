@@ -65,7 +65,7 @@ public class CalculatorParser {
 		SymbolicExpression result;
 		LinkedList<SymbolicExpression> argList = new LinkedList<SymbolicExpression>();
 		this.st.nextToken();
-		for(int i = 0; this.st.ttype == ')'; i++) {
+		for(int i = 0; this.st.ttype != ')'; i++) {
 		    result = number();
 		    argList.add(result);
 		    this.st.nextToken();
@@ -73,6 +73,7 @@ public class CalculatorParser {
 		return new FunctionDeclaration(funcName, argList);
 	    }
 	}
+	this.st.pushBack();
 	return assignment(functionMap);
     }
 
@@ -130,11 +131,12 @@ public class CalculatorParser {
 		SymbolicExpression result;
 		FunctionDeclaration funcDec = functionMap.get(function);
 		int argsSize = funcDec.getArgSize();
+		//System.out.println(argsSize);
 		LinkedList<SymbolicExpression> valList = new LinkedList<SymbolicExpression>();
 
 		this.st.nextToken();
 		int i = 0;
-		for( ; this.st.ttype == ')'; i++) {
+		for( ; this.st.ttype != ')'; i++) {
 		    result = number();
 		    valList.add(result);
 		    this.st.nextToken();
@@ -146,6 +148,7 @@ public class CalculatorParser {
 		if(i > argsSize){
 		    throw new SyntaxErrorException("Error, function " + function + " called with to many arguments. Expected " + argsSize + ", got " + i + ".");
 		}
+	        System.out.println(valList.size());
 		return new FunctionCall(function, funcDec.getArgs(), valList, funcDec.getBody());
 	    }
 	}
@@ -223,6 +226,8 @@ public class CalculatorParser {
 		SymbolicExpression tru;
 		tru = assignment(functionMap);
 		if(this.st.nextToken() != '}') {
+		    System.out.println(this.st.sval);
+		    System.out.println(this.st.ttype);
 		    throw new SyntaxErrorException("expected '}'");
 		}
 		this.st.nextToken();
@@ -238,6 +243,8 @@ public class CalculatorParser {
 			SymbolicExpression fal;
 			fal = assignment(functionMap);
 			if(this.st.nextToken() != '}') {
+			    System.out.println(this.st.sval);
+			    System.out.println(this.st.ttype);
 			    throw new SyntaxErrorException("expected '}'");
 			}
 			return new Conditional(lhs, rhs, tru, fal, op);

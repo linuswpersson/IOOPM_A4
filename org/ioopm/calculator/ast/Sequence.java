@@ -4,18 +4,23 @@ import java.util.*;
  * Class for a sequence.
  */
 public class Sequence extends SymbolicExpression {
-    private LinkedList<SymbolicExpression> body;
+    private LinkedList<SymbolicExpression> body = new LinkedList<SymbolicExpression>();
+    private LinkedList<SymbolicExpression> args;
+
+    public void setArgs(LinkedList<SymbolicExpression> args){
+	this.args = args;
+    }
     
     public void addLine(SymbolicExpression newLine){
 	this.body.addLast(newLine);
     }
 
-    public void addFirst(SymbolicExpression newLine){
-	this.body.addFirst(newLine);
-    }
-
     public LinkedList<SymbolicExpression> getBody(){
 	return this.body;
+    }
+
+    public LinkedList<SymbolicExpression> getArgs(){
+	return this.args;
     }
 
     @Override
