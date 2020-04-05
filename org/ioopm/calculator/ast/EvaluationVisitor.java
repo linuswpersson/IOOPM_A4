@@ -20,13 +20,6 @@ public class EvaluationVisitor implements Visitor {
 	    throw new IllegalExpressionException("Conditional with non-constants not allowed.");
 	}
 	int op = n.getOp();
-	System.out.println("------------ COND INFO --------------");
-	System.out.println("left-arg: " + lArg);
-	System.out.println("right-arg: " + rArg);
-	System.out.println("Tru: " + n.getTru());
-	System.out.println("Tru: " + n.getFal());
-	System.out.println("OP: " + op);
-	System.out.println("------------ COND END  --------------");
 	if(op < 1 || op > 5){
 	    throw new IllegalExpressionException("Error: invalid operation value.");
 	}
@@ -205,7 +198,6 @@ public class EvaluationVisitor implements Visitor {
 	if(n.getArgSize() != 0){
 	    for(int i = 0; i < n.getArgSize(); i++){
 		asignmentList.addFirst(new Assignment(valsList.get(i).accept(this), argsList.get(i)));
-		System.out.println(valsList.get(i).toString());
 	    }
 	}
 	body.setArgs(asignmentList);
@@ -218,15 +210,12 @@ public class EvaluationVisitor implements Visitor {
 	LinkedList<SymbolicExpression> body = n.getBody();
 	int ii = 0;
 	for( ; ii < arg.size(); ii++){
-	    System.out.println(arg.get(ii).toString());
 	    arg.get(ii).accept(this);
 	}
 	int i = 0;
 	for( ; i < body.size()-1; i++){
-	    System.out.println(body.get(i).toString());
 	    body.get(i).accept(this);
 	}
-	System.out.println(body.get(i).toString());
 	return body.get(i++).accept(this);
     }
 
