@@ -96,10 +96,33 @@ public class ReassignmentChecker implements Visitor {
     }
 
     public SymbolicExpression visit(FunctionCall a){
+        Sequence body = a.getBody();
+	LinkedList<SymbolicExpression> argsList = a.getArgs();
+	LinkedList<SymbolicExpression> valsList = a.getVals();
+	LinkedList<SymbolicExpression> asignmentList = new LinkedList<SymbolicExpression>();
+	if(a.getArgSize() != 0){
+	    for(int i = 0; i < a.getArgSize(); i++){
+		asignmentList.addFirst(new Assignment(valsList.get(i).accept(this), argsList.get(i)));
+	    }
+	}
+	body.setArgs(asignmentList);
+        Scope fc = new Scope(body);
+	fc.accept(this);
 	return a;
     }
 
     public SymbolicExpression visit(Sequence a){
+        LinkedList<SymbolicExpression> arg = a.getArgs();
+	LinkedList<SymbolicExpression> body = a.getBody();
+	int ii = 0;
+	for( ; ii < arg.size(); ii++){
+	    arg.get(ii).accept(this);
+	}
+	int i = 0;
+	for( ; i < body.size(); i++){
+	    body.get(i).accept(this);
+	    System.out.println(body.get(i).toString());
+	}
 	return a;
     }
 
@@ -112,6 +135,10 @@ public class ReassignmentChecker implements Visitor {
     }
     
     public SymbolicExpression visit(Clear a) {
+	return a;
+    }
+
+    public SymbolicExpression visit(End a) {
 	return a;
     }
 }

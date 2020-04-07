@@ -20,4 +20,5 @@ public interface Visitor {
     public SymbolicExpression visit(Conditional n);
     public SymbolicExpression visit(FunctionCall n);
     public SymbolicExpression visit(Sequence n);
+    public SymbolicExpression visit(End n);
 }

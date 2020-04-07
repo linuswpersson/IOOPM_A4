@@ -59,20 +59,24 @@ public class CalculatorParser {
         if(this.st.sval != null) {
 	    String function = this.st.sval;
 	    if(function.equalsIgnoreCase("function")){
-
 		this.st.nextToken();
 		if(this.st.sval == null){
-		    
+		    throw new SyntaxErrorException("expected function-name");
 		}
 		String funcName = this.st.sval;
-		
 		SymbolicExpression result;
 		LinkedList<SymbolicExpression> argList = new LinkedList<SymbolicExpression>();
 		this.st.nextToken();
-		for(int i = 0; this.st.ttype != ')'; i++) {
+		if(this.st.ttype != '('){
+		    throw new SyntaxErrorException("expected '('");
+		}
+	        do{
 		    result = number();
 		    argList.add(result);
 		    this.st.nextToken();
+		} while(this.st.ttype == ',');
+		if(this.st.ttype != ')'){
+		    throw new SyntaxErrorException("Please us ',' between arguments and end with ')'");
 		}
 		return new FunctionDeclaration(funcName, argList);
 	    }
@@ -151,7 +155,6 @@ public class CalculatorParser {
 		if(i > argsSize){
 		    throw new SyntaxErrorException("Error, function " + function + " called with to many arguments. Expected " + argsSize + ", got " + i + ".");
 		}
-	        System.out.println(valList.size());
 		return new FunctionCall(function, valList, functionMap);
 	    }
 	}
@@ -314,6 +317,9 @@ public class CalculatorParser {
 	    }
 	    else if(operation.equalsIgnoreCase("clear")) {
 		return Clear.instance();
+	    }
+	    else if (operation.equalsIgnoreCase("end")) {
+		return End.instance();
 	    }
 	    else if(Constants.namedConstants.containsKey(operation)) {
 		return new Namedconstant(Constants.namedConstants.get(operation), operation);

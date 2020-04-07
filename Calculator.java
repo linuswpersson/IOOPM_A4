@@ -41,15 +41,15 @@ class Calculator {
 		    else if (result == Vars.instance()) {
 			System.out.println(vars);
 		    }
+		    else if(result == End.instance()){
+			
+		    }
 		    else{
 		        vars.clear();
 			System.out.println("Variables cleared.");
 		    }
 		}
-
-
-
-		
+	
 		else if(result.isFuncDec()){
 		    FunctionDeclaration funcDec = new FunctionDeclaration(result.getName(), result.getArgs());
 		    
@@ -61,27 +61,18 @@ class Calculator {
 		    String str1 = sc.nextLine();
 		    p.updateString(str1);
 		    newLine = p.parse(functionMap);
-		    body.addLine(newLine);
-		    int i = 0;
-		    while(i < 3){
+		    while(newLine != End.instance()){
+			body.addLine(newLine);
 			String str2 = sc.nextLine();
 			p.updateString(str2);
-		    	newLine = p.parse(functionMap);
-		    	body.addLine(newLine);
-			i++;
+			newLine = p.parse(functionMap);
 		    }
 		    if(body.getBody().size() == 0){
-		        throw new SyntaxErrorException("Empty function not allowed.");
+			throw new SyntaxErrorException("Empty function not allowed.");
 		    }
-		    
 		    funcDec.addBody(body);
 		    functionMap.put(funcDec.getName(), funcDec);
-		    
 		}
-
-
-
-		
 		else {
 		    
 		    SymbolicExpression evaluation;

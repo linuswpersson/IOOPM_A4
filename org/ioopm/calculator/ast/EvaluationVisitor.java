@@ -77,14 +77,9 @@ public class EvaluationVisitor implements Visitor {
     public SymbolicExpression visit(Assignment n) {
 	SymbolicExpression lArg = n.getLhs().accept(this);
 	SymbolicExpression rArg = n.getRhs();
-	if(rArg.isConstant() != 2) {
-	    Environment currEnv = envStack.peek();
-	    currEnv.put((Variable)rArg, lArg);	
-	    return lArg;
-	}
-	else {
-	    throw new IllegalExpressionException("Assignment to named constant not allowed.");
-	}
+	Environment currEnv = envStack.peek();
+	currEnv.put((Variable)rArg, lArg);	
+	return lArg;
     }
 
     public SymbolicExpression visit(Constant n) {
@@ -230,4 +225,9 @@ public class EvaluationVisitor implements Visitor {
     public SymbolicExpression visit(Clear n) {
 	throw new IllegalArgumentException("Commands can't be evaluated.");
     }
+
+    public SymbolicExpression visit(End n) {
+	throw new IllegalArgumentException("Commands can't be evaluated.");
+    }
 }
+
