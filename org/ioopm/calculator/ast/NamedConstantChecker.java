@@ -2,6 +2,15 @@ package org.ioopm.calculator.ast;
 import java.util.*;
 
 public class NamedConstantChecker implements Visitor {
+    private Boolean flag = true;
+
+    public void setFlag() {
+	this.flag = false;
+    }
+
+    public Boolean getFlag() {
+	return this.flag;
+    }
 
     public SymbolicExpression check(SymbolicExpression topLevel) {
 	return topLevel.accept(this);
@@ -86,17 +95,20 @@ public class NamedConstantChecker implements Visitor {
     }
 
     public SymbolicExpression visit(FunctionCall a){
-        Sequence body = a.getBody();
-	LinkedList<SymbolicExpression> argsList = a.getArgs();
-	LinkedList<SymbolicExpression> valsList = a.getVals();
-	LinkedList<SymbolicExpression> asignmentList = new LinkedList<SymbolicExpression>();
-	if(a.getArgSize() != 0){
-	    for(int i = 0; i < a.getArgSize(); i++){
-		asignmentList.addFirst(new Assignment(valsList.get(i).accept(this), argsList.get(i)));
+	if(this.getFlag()){
+	    this.setFlag();
+	    Sequence body = a.getBody();
+	    LinkedList<SymbolicExpression> argsList = a.getArgs();
+	    LinkedList<SymbolicExpression> valsList = a.getVals();
+	    LinkedList<SymbolicExpression> asignmentList = new LinkedList<SymbolicExpression>();
+	    if(a.getArgSize() != 0){
+		for(int i = 0; i < a.getArgSize(); i++){
+		    asignmentList.addFirst(new Assignment(valsList.get(i).accept(this), argsList.get(i)));
+		}
 	    }
+	    body.setArgs(asignmentList);
+	    body.accept(this);
 	}
-	body.setArgs(asignmentList);
-	body.accept(this);
 	return a;
     }
 
@@ -109,8 +121,9 @@ public class NamedConstantChecker implements Visitor {
 	}
 	int i = 0;
 	for( ; i < body.size(); i++){
-	    body.get(i).accept(this);
-	    System.out.println(body.get(i).toString());
+	    if(!(body.get(i) instanceof FunctionCall)){
+		body.get(i).accept(this);
+	    }
 	}
 	return a;
     }

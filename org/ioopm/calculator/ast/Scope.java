@@ -2,7 +2,7 @@ package org.ioopm.calculator.ast;
 import java.util.*;
 
 /**
- *Node representation of Scope
+ *Node representation of Scope.
  */
 public class Scope extends Unary {
     

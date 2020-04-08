@@ -26,4 +26,38 @@ x---
 cos (((45*2)+60)-x)
 ((45+6)/((sin 5)/2)
 5+10)
+(2 = z) + {(5 + z = z) + {23 + z = z}}
+{{1 = x} = x} = y
+x
+y
+if 3 < 5 { 42 } else { 4711 }
+if 2 < 2 { wrong } else { if 3 < 5 { if -6 < (-66*-22) { right } else { wrong } } else { wrong } }
+function max(z,x,c,v)
+z+x+c+v
+end
+max(1,2*3,4)
+max 1,2,3,4)
+max(1,2,3)
+max(1,2,3,4,5)
+max(1,2,3,4)
+function sub(a,b)
+a - b
+end
+function gcd(a, b)
+sub(b,a) = ba
+sub(a,b) = ab
+if a == b { a } else { if a < b { gcd(a, ba) } else { gcd { ab,b } } }
+end
+gcd(105,45)
+function gcd(a, b)
+sub(b,a) = ba
+sub(a,b) = ab
+if a == b { a } else { if a < b { gcd(a, ba) } else { gcd(ab,b) } }
+end
+gcd(105,45)
+function factorial(n)
+n - 1 = m
+if n > 1 {factorial(m) * n} else {1}
+end
+factorial(5)
 quit

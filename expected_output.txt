@@ -55,10 +55,45 @@ Syntax Error: expected ')'
 Please enter an expression: 
 15.0
 Please enter an expression: 
+39.0
+Please enter an expression: 
+1.0
+Please enter an expression: 
+x
+Please enter an expression: 
+1.0
+Please enter an expression: 
+42.0
+Please enter an expression: 
+right
+Please enter an expression: 
+Please enter an expression: 
+Syntax Error: Please us ',' between arguments and end with ')'
+Please enter an expression: 
+Syntax Error: expected '('
+Please enter an expression: 
+Syntax Error: Error, function max called with to few arguments. Expected 4, got 3.
+Please enter an expression: 
+Syntax Error: Error, function max called with to many arguments. Expected 4, got 5.
+Please enter an expression: 
+10.0
+Please enter an expression: 
+Please enter an expression: 
+Syntax Error: expected '('
+Please enter an expression: 
+Please enter an expression: 
+gcd
+Please enter an expression: 
+Please enter an expression: 
+15.0
+Please enter an expression: 
+Please enter an expression: 
+120.0
+Please enter an expression: 
 
 program terminated.
 
 ------Statistics------
-Expressions entered: 28
-Successfully evaluated: 21
-Fully evaluated: 13
+Expressions entered: 48
+Successfully evaluated: 31
+Fully evaluated: 20

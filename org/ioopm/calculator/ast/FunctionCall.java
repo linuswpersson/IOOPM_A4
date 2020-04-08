@@ -6,7 +6,7 @@ import java.util.*;
 public class FunctionCall extends SymbolicExpression {
     private String name;
     private LinkedList<SymbolicExpression> valList;
-    private HashMap<String, FunctionDeclaration> functionMap;
+    private HashMap<String, FunctionDeclaration> functionMap;       // pointer to global(in scope) hashtable with all FunctionDeclarations stored.
     
     public FunctionCall(String name, LinkedList<SymbolicExpression> valList, HashMap<String, FunctionDeclaration> functionMap) {
 	this.name = name;
@@ -24,11 +24,12 @@ public class FunctionCall extends SymbolicExpression {
 	return this.name;
     }
 
+    // fetches the body from the functionMap pointer.
     public Sequence getBody(){
 	return functionMap.get(this.name).getBody();
     }
 
-
+    @Override
     public LinkedList<SymbolicExpression> getArgs(){
 	return this.functionMap.get(this.name).getArgs();
     }

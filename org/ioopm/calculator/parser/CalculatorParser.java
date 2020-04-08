@@ -70,13 +70,17 @@ public class CalculatorParser {
 		if(this.st.ttype != '('){
 		    throw new SyntaxErrorException("expected '('");
 		}
-	        do{
-		    result = number();
-		    argList.add(result);
-		    this.st.nextToken();
-		} while(this.st.ttype == ',');
+		this.st.nextToken();
 		if(this.st.ttype != ')'){
-		    throw new SyntaxErrorException("Please us ',' between arguments and end with ')'");
+		    this.st.pushBack();
+		    do{
+			result = number();
+			argList.add(result);
+			this.st.nextToken();
+		    } while(this.st.ttype == ',');
+		    if(this.st.ttype != ')'){
+			throw new SyntaxErrorException("Please us ',' between arguments and end with ')'");
+		    }
 		}
 		return new FunctionDeclaration(funcName, argList);
 	    }
@@ -140,13 +144,24 @@ public class CalculatorParser {
 		FunctionDeclaration funcDec = functionMap.get(function);
 		int argsSize = funcDec.getArgSize();
 		LinkedList<SymbolicExpression> valList = new LinkedList<SymbolicExpression>();
-
-		this.st.nextToken();
 		int i = 0;
-		for( ; this.st.ttype != ')'; i++) {
-		    result = number();
-		    valList.add(result);
-		    this.st.nextToken();
+
+	        this.st.nextToken();
+		if(this.st.ttype != '('){
+		    throw new SyntaxErrorException("expected '('");
+		}
+		this.st.nextToken();
+		if(this.st.ttype != ')'){
+		    this.st.pushBack();
+		    do{
+			result = number();
+		        valList.add(result);
+			this.st.nextToken();
+			i++;
+		    } while(this.st.ttype == ',');
+		    if(this.st.ttype != ')'){
+			throw new SyntaxErrorException("Please us ',' between arguments and end with ')'");
+		    }
 		}
 
 	        if(i < argsSize){
@@ -232,8 +247,6 @@ public class CalculatorParser {
 		SymbolicExpression tru;
 		tru = assignment(functionMap);
 		if(this.st.nextToken() != '}') {
-		    System.out.println(this.st.sval);
-		    System.out.println(this.st.ttype);
 		    throw new SyntaxErrorException("expected '}'");
 		}
 		this.st.nextToken();
@@ -249,8 +262,6 @@ public class CalculatorParser {
 			SymbolicExpression fal;
 			fal = assignment(functionMap);
 			if(this.st.nextToken() != '}') {
-			    System.out.println(this.st.sval);
-			    System.out.println(this.st.ttype);
 			    throw new SyntaxErrorException("expected '}'");
 			}
 			return new Conditional(lhs, rhs, tru, fal, op);

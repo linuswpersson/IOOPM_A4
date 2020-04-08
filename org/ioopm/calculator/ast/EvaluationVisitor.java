@@ -16,7 +16,7 @@ public class EvaluationVisitor implements Visitor {
     public SymbolicExpression visit(Conditional n) {
 	SymbolicExpression lArg = n.getLhs().accept(this);
 	SymbolicExpression rArg = n.getRhs().accept(this);
-	if(lArg.isConstant() < 1 && rArg.isConstant() < 1) {
+	if(lArg.isConstant() < 1 || rArg.isConstant() < 1) {
 	    throw new IllegalExpressionException("Conditional with non-constants not allowed.");
 	}
 	int op = n.getOp();

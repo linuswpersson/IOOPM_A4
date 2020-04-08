@@ -22,7 +22,7 @@ class Calculator {
     public static void main(String[] args) {
 
 	final HashMap<String, FunctionDeclaration> functionMap = new HashMap<String, FunctionDeclaration>();
-	
+        
         Environment vars = new Environment();
 	boolean event = true;
 	System.out.println("Welcome to the parser!");
@@ -32,6 +32,7 @@ class Calculator {
 	CalculatorParser p = new CalculatorParser(expression);
         final EvaluationVisitor eval = new EvaluationVisitor();
 	while(event) {
+	    FunctionDeclaration funcDec = null;
 	    try {
 		SymbolicExpression result = p.parse(functionMap);
 		if (result.isCommand()) {
@@ -49,15 +50,17 @@ class Calculator {
 			System.out.println("Variables cleared.");
 		    }
 		}
-	
+
+		// Function declaration handler
 		else if(result.isFuncDec()){
-		    FunctionDeclaration funcDec = new FunctionDeclaration(result.getName(), result.getArgs());
+		    funcDec = new FunctionDeclaration(result.getName(), result.getArgs());
 		    
 		    functionMap.put(funcDec.getName(), funcDec);
 	    
 		    SymbolicExpression newLine;
 		    Sequence body = new Sequence();
 
+		    // parses new expressions and adds them to body. loop terminates when "end" is returned.
 		    String str1 = sc.nextLine();
 		    p.updateString(str1);
 		    newLine = p.parse(functionMap);
@@ -68,6 +71,7 @@ class Calculator {
 			newLine = p.parse(functionMap);
 		    }
 		    if(body.getBody().size() == 0){
+			functionMap.remove(funcDec.getName());
 			throw new SyntaxErrorException("Empty function not allowed.");
 		    }
 		    funcDec.addBody(body);
@@ -84,15 +88,27 @@ class Calculator {
 		    System.out.println(evaluation);
 		}
 	    }catch(UndefinedVariableException e) {
+		if(funcDec != null){
+		    functionMap.remove(funcDec.getName());
+		}
 	        System.out.print("Error:");
 	        System.out.println(e.getMessage());
 	    }catch(IllegalExpressionException e) {
+		if(funcDec != null){
+		    functionMap.remove(funcDec.getName());
+		}
 		System.out.print("Assignment Error: ");
 	        System.out.println(e.getMessage());
 	    }catch(SyntaxErrorException e) {
+		if(funcDec != null){
+		    functionMap.remove(funcDec.getName());
+		}
 		System.out.print("Syntax Error: ");
 		System.out.println(e.getMessage());
 	    }catch(IOException e) {
+		if(funcDec != null){
+		    functionMap.remove(funcDec.getName());
+		}
 		System.err.println("IO Exception!");
 	    }
 	    if(event){
